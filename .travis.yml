@@ -15,8 +15,4 @@ after_success:
   - docker build -t bushjdo/multi-worker ./worker
   # Login to Doker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  #Push image to Docker hub
-  - docker push bushjdo/multi-react
-  - docker push bushjdo/multi-nginx
-  - docker push bushjdo/multi-server
-  - docker push bushjdo/multi-worker
+  
