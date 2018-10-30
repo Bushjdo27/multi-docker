@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t bushjdo/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run bushjdo/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t bushjdo/multi-react ./client
+  - docker build -t bushjdo/multi-nginx ./nginx
+  - docker build -t bushjdo/multi-server ./server
+  - docker build -t bushjdo/multi-worker ./worker
+  # Login to Doker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Push image to Docker hub
+  - docker push bushjdo/multi-react
+  - docker push bushjdo/multi-nginx
+  - docker push bushjdo/multi-server
+  - docker push bushjdo/multi-worker
