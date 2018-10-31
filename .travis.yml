@@ -15,9 +15,23 @@ after_success:
   - docker build -t bushjdo/multi-worker ./worker
   # Login to Doker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Push image to docker hub
   - docker push bushjdo/multi-react
   - docker push bushjdo/multi-nginx
   - docker push bushjdo/multi-server
   - docker push bushjdo/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  app: multi-docker
+  env: MultiDocker-env
+  region: us-west-2
+  bucket_name: elasticbeanstalk-us-west-2-153280271500
+  bucket_path: multi-docker
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
   
   
